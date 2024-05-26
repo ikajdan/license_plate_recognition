@@ -2,9 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-import cv2
-
-from processing.utils import perform_processing
+from processing.logic import get_license_plate
 
 
 def main():
@@ -25,12 +23,7 @@ def main():
     )
     results = {}
     for image_path in images_paths:
-        image = cv2.imread(str(image_path))
-        if image is None:
-            print(f"Error loading image {image_path}")
-            continue
-
-        results[image_path.name] = perform_processing(image)
+        results[image_path.name] = get_license_plate(image_path)
 
     with results_file.open("w", encoding="utf-8") as output_file:
         json.dump(results, output_file, indent=4)
